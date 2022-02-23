@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="masterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="airlines">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="64" />
+        </EntityType>
+        <EntityType Name="airports">
+          <Key>
+            <PropertyRef Name="code" />
+          </Key>
+          <Property Name="name" Type="varchar" MaxLength="56" />
+          <Property Name="code" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="stateCode" Type="varchar" MaxLength="2" />
+          <Property Name="countryCode" Type="varchar" MaxLength="2" />
+          <Property Name="countryName" Type="varchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="routes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="fromCode" Type="varchar" MaxLength="2" />
+          <Property Name="toCode" Type="varchar" MaxLength="2" />
+          <Property Name="airlineId" Type="int" />
+          <Property Name="airportId" Type="varchar" MaxLength="3" />
+        </EntityType>
+        <Association Name="FK__route__airlineId__4DB4832C">
+          <End Role="airlines" Type="Self.airlines" Multiplicity="0..1" />
+          <End Role="routes" Type="Self.routes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="airlines">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="routes">
+              <PropertyRef Name="airlineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__route__airportId__4EA8A765">
+          <End Role="airports" Type="Self.airports" Multiplicity="0..1" />
+          <End Role="routes" Type="Self.routes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="airports">
+              <PropertyRef Name="code" />
+            </Principal>
+            <Dependent Role="routes">
+              <PropertyRef Name="airportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="masterModelStoreContainer">
+          <EntitySet Name="airlines" EntityType="Self.airlines" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="airports" EntityType="Self.airports" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="routes" EntityType="Self.routes" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__route__airlineId__4DB4832C" Association="Self.FK__route__airlineId__4DB4832C">
+            <End Role="airlines" EntitySet="airlines" />
+            <End Role="routes" EntitySet="routes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__route__airportId__4EA8A765" Association="Self.FK__route__airportId__4EA8A765">
+            <End Role="airports" EntitySet="airports" />
+            <End Role="routes" EntitySet="routes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="masterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="airlines">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="routes" Relationship="Self.FK__route__airlineId__4DB4832C" FromRole="airlines" ToRole="routes" />
+        </EntityType>
+        <EntityType Name="airports">
+          <Key>
+            <PropertyRef Name="code" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="56" FixedLength="false" Unicode="false" />
+          <Property Name="code" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="stateCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="countryCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="countryName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="routes" Relationship="Self.FK__route__airportId__4EA8A765" FromRole="airports" ToRole="routes" />
+        </EntityType>
+        <EntityType Name="routes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="fromCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="toCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="airlineId" Type="Int32" />
+          <Property Name="airportId" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="airlines" Relationship="Self.FK__route__airlineId__4DB4832C" FromRole="routes" ToRole="airlines" />
+          <NavigationProperty Name="airports" Relationship="Self.FK__route__airportId__4EA8A765" FromRole="routes" ToRole="airports" />
+        </EntityType>
+        <Association Name="FK__route__airlineId__4DB4832C">
+          <End Role="airlines" Type="Self.airlines" Multiplicity="0..1" />
+          <End Role="routes" Type="Self.routes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="airlines">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="routes">
+              <PropertyRef Name="airlineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__route__airportId__4EA8A765">
+          <End Role="airports" Type="Self.airports" Multiplicity="0..1" />
+          <End Role="routes" Type="Self.routes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="airports">
+              <PropertyRef Name="code" />
+            </Principal>
+            <Dependent Role="routes">
+              <PropertyRef Name="airportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="masterEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="airlines" EntityType="Self.airlines" />
+          <EntitySet Name="airports" EntityType="Self.airports" />
+          <EntitySet Name="routes" EntityType="Self.routes" />
+          <AssociationSet Name="FK__route__airlineId__4DB4832C" Association="Self.FK__route__airlineId__4DB4832C">
+            <End Role="airlines" EntitySet="airlines" />
+            <End Role="routes" EntitySet="routes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__route__airportId__4EA8A765" Association="Self.FK__route__airportId__4EA8A765">
+            <End Role="airports" EntitySet="airports" />
+            <End Role="routes" EntitySet="routes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="masterModelStoreContainer" CdmEntityContainer="masterEntities">
+          <EntitySetMapping Name="airlines">
+            <EntityTypeMapping TypeName="masterModel.airlines">
+              <MappingFragment StoreEntitySet="airlines">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="airports">
+            <EntityTypeMapping TypeName="masterModel.airports">
+              <MappingFragment StoreEntitySet="airports">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="stateCode" ColumnName="stateCode" />
+                <ScalarProperty Name="countryCode" ColumnName="countryCode" />
+                <ScalarProperty Name="countryName" ColumnName="countryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="routes">
+            <EntityTypeMapping TypeName="masterModel.routes">
+              <MappingFragment StoreEntitySet="routes">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="fromCode" ColumnName="fromCode" />
+                <ScalarProperty Name="toCode" ColumnName="toCode" />
+                <ScalarProperty Name="airlineId" ColumnName="airlineId" />
+                <ScalarProperty Name="airportId" ColumnName="airportId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
